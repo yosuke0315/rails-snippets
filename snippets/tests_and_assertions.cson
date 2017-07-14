@@ -2,7 +2,7 @@
   'it':
     'prefix': 'it'
     'body': """
-      it "$1" do
+      it '$1' do
         $2
       end
     """
@@ -10,7 +10,7 @@
   'describe':
     'prefix': 'describe'
     'body': """
-      describe "when $1" do
+      describe '$1' do
         $2
       end
     """
@@ -18,7 +18,7 @@
   'context':
     'prefix': 'context'
     'body': """
-      context "when $1" do
+      context '$1' do
         $2
       end
     """
@@ -73,3 +73,187 @@
   'assert_redirected_to':
     'prefix': 'asr'
     'body': 'assert_redirected_to ${1:users}_path$0'
+
+  'benchmarkTemplate':
+    'prefix': 'benchmark'
+    'body': """
+      require 'benchmark/ips'
+      puts '=' * 100
+      Benchmark.ips do |x|
+        x.config(time: 5, warmup: 2)
+        x.report('label') do
+          $1
+        end
+        x.compare!
+      end
+      puts '=' * 100
+    """
+  'consoleCaller':
+    'prefix': 'console_caller'
+    'body': """
+      puts '=' * 100
+      puts caller
+      puts '=' * 100
+    """
+  'consoleLine':
+    'prefix': 'console_line'
+    'body': """
+      puts '=' * 100
+      puts "#\{ I18n.l Time.zone.now } #\{ __FILE__ }:#\{ __LINE__ }"
+      puts '=' * 100
+    """
+  'consoleLog':
+    'prefix': 'console_log'
+    'body': """
+      puts '=' * 100
+      puts "$1 : #\{ $1.inspect }"
+      puts '=' * 100
+    """
+  'consoleQuery':
+    'prefix': 'console_query'
+    'body': """
+      puts '=' * 100
+      puts "$1 : #\{ $1.to_sql }"
+      puts '=' * 100
+    """
+  'consoleDebug':
+    'prefix': 'console_debug'
+    'body': """
+      puts '=' * 100
+      puts "$1 : #\{ $1.to_yaml }"
+      puts '=' * 100
+    """
+  'consoleError':
+    'prefix': 'console_error'
+    'body': """
+      puts '=' * 100
+      puts "$1.message :   #\{ $1.message }"
+      puts "$1.backtrace : #\{ $1.backtrace.join("\\\\n") }"
+      puts '=' * 100
+    """
+  'consoleErrorRescue':
+    'prefix': 'console_error_rescue'
+    'body': """
+      rescue => e
+        puts '=' * 100
+        puts "e.message :   #\{ e.message }"
+        puts "e.backtrace : #\{ e.backtrace.join("\\\\n") }"
+        puts '=' * 100
+    """
+  'shared_examples':
+    'prefix': 'shared_examples'
+    'body': """
+      shared_examples '$1' do
+        $2
+      end
+    """
+  'it_behaves_like':
+    'prefix': 'it_behaves_like'
+    'body': "it_behaves_like '$1'"
+  'described_class':
+    'prefix': 'described_class'
+    'body': "described_class"
+  'subject':
+    'prefix': 'subject'
+    'body': """
+      subject { $1 }
+    """
+  'it is':
+    'prefix': 'it_is'
+    'body': """
+      it { is_expected.to $1 }
+    """
+  'it is not':
+    'prefix': 'it_is_not'
+    'body': """
+      it { is_expected.not_to $1 }
+    """
+  'it is true':
+    'prefix': 'it_is_true'
+    'body': """
+      it { is_expected.to be_truthy }
+    """
+  'it is false':
+    'prefix': 'it_is_false'
+    'body': """
+      it { is_expected.to be_falsey }
+    """
+  'describeCallbacks':
+    'prefix': 'describe_callbacks'
+    'body': """
+      describe 'Callbacks' do
+        describe '#$1' do
+        end
+      end
+    """
+  'describeAssociations':
+    'prefix': 'describe_associations'
+    'body': """
+      describe 'Associations' do
+        it { is_expected.to belong_to(:$1) }
+        it { is_expected.to have_many(:$2) }
+        it { is_expected.to have_one(:$3) }
+        it { is_expected.to accept_nested_attributes_for(:$4) }
+        it { is_expected.to delegate_method(:$5).to(:$6) }
+      end
+    """
+  'describeValidations':
+    'prefix': 'describe_validations'
+    'body': """
+      describe 'Validations' do
+        it { is_expected.to validate_presence_of(:$1) }
+      end
+    """
+  'describeScopes':
+    'prefix': 'describe_scopes'
+    'body': """
+      describe '.$1' do
+        subject { described_class.$1 }
+        context '$3' do
+          let(:$2) { FactoryGirl.create(:$2$4) }
+          it('取得する') { is_expected.to include $2 }
+        end
+        context '$5' do
+          let(:$2) { FactoryGirl.create(:$2$6) }
+          it('取得しない') { is_expected.not_to include $2 }
+        end
+      end
+    """
+  'let':
+    'prefix': 'let'
+    'body': """
+      let(:$1) { $2 }
+    """
+  'let!':
+    'prefix': 'let!'
+    'body': """
+      let!(:$1) { $2 }
+    """
+  'let_factory_girl':
+    'prefix': 'letfg'
+    'body': """
+      let(:$1) { FactoryGirl.create(:$1$2) }
+    """
+  'let!_factory_girl':
+    'prefix': 'let!fg'
+    'body': """
+      let!(:$1) { FactoryGirl.create(:$1$2) }
+    """
+  'factory_girl_create':
+    'prefix': 'fgc'
+    'body': """
+      $1 = FactoryGirl.create(:$1$2)
+    """
+  'factory_girl_build':
+    'prefix': 'fgb'
+    'body': """
+      $1 = FactoryGirl.build(:$1$2)
+    """
+  'save_and_open_page':
+    'prefix': 'save_and_open_page'
+    'body': 'save_and_open_page'
+  'save_screenshot':
+    'prefix': 'save_screenshot'
+    'body': """
+      page.save_screenshot 'tmp/screenshot/$1.png'
+    """

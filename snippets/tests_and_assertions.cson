@@ -240,14 +240,14 @@
       let!(:$1) { FactoryGirl.create(:$1$2) }
     """
   'factory_girl_create':
-    'prefix': 'fgc'
+    'prefix': 'factory_girl_create'
     'body': """
-      $1 = FactoryGirl.create(:$1$2)
+      FactoryGirl.create(:$1)
     """
   'factory_girl_build':
-    'prefix': 'fgb'
+    'prefix': 'factory_girl_build'
     'body': """
-      $1 = FactoryGirl.build(:$1$2)
+      FactoryGirl.build(:$1)
     """
   'save_and_open_page':
     'prefix': 'save_and_open_page'
